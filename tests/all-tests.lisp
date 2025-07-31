@@ -7,67 +7,67 @@
 
 (test cl-hashmap-test
   "Tests the cl-hashmap implementation."
-  (let ((map (hashmap-create :cl-hashtable)))
+  (let ((map (make-hash-table :cl-hashtable)))
     ;; Can we create a hashmap correctly?
     (is (typep map 'hashtable-test:cl-hashmap)
-        "hashmap-create should return an object of type HASHTABLE-TEST:CL-HASHTABLE.")
+        "make-hash-table should return an object of type HASHTABLE-TEST:CL-HASHTABLE.")
 
-    (is (not (null map)) "hashmap-create should return a non-nil object.")
+    (is (not (null map)) "make-hash-table should return a non-nil object.")
 
     ;; Can we add a value in the map and read it?
-    (hashmap-add map "one" 1)
+    (addhash map "one" 1)
 
-    (is (equal 1 (hashtable-test:hashmap-get map "one"))
-        "hashmap-get should retrieve the correct value after add.")
+    (is (equal 1 (gethash map "one"))
+        "gethash should retrieve the correct value after add.")
 
 
     ;; Same with more data
-    (hashmap-add map "two" 2)
+    (addhash map "two" 2)
 
-    (is (equal 2 (hashtable-test:hashmap-get map "two"))
-        "hashmap-get should retrieve the correct value after add.")
+    (is (equal 2 (gethash map "two"))
+        "gethash should retrieve the correct value after add.")
 
-    (hashmap-add map "three" 3)
+    (addhash map "three" 3)
 
-    (is (equal 3 (hashtable-test:hashmap-get map "three"))
-        "hashmap-get should retrieve the correct value after add.")
+    (is (equal 3 (gethash map "three"))
+        "gethash should retrieve the correct value after add.")
 
 
-    (hashmap-add map "four" 4)
+    (addhash map "four" 4)
 
-    (is (equal 4 (hashtable-test:hashmap-get map "four"))
-        "hashmap-get should retrieve the correct value after add.")
+    (is (equal 4 (gethash map "four"))
+        "gethash should retrieve the correct value after add.")
 
     ;; Can we delete an entry?
-    (finishes (hashmap-delete map "four"))
+    (finishes (remhash map "four"))
 
-    (is (equal nil (hashtable-test:hashmap-get map "four"))
-        "hashmap-get should retrieve the correct value after add.")
+    (is (equal nil (gethash map "four"))
+        "gethash should retrieve the correct value after add.")
 
     ;; What happens when we try to delete a non existant entry?
-    (finishes (hashmap-delete map "five"))
+    (finishes (remhash map "five"))
 
     ;; What happens when we try to fetch a non existant entry
-    (is (equal nil (hashmap-get map "six")))
+    (is (equal nil (gethash map "six")))
 
-    ;; Does hashmap-iterate work as expected?
+    ;; Does maphash work as expected?
     (let ((keys '())
           (values '()))
-      (hashmap-iterate map (lambda (key value)
-                             (push key keys)
-                             (push value values)))
+      (maphash map (lambda (key value)
+                     (push key keys)
+                     (push value values)))
       (is (equal (sort (copy-list keys) #'string<)
                  (sort (list "one" "two" "three") #'string<))
-          "hashmap-iterate should visit all keys.")
+          "maphash should visit all keys.")
       (is (equal (sort (copy-list values) #'<)
                  (sort (list 1 2 3) #'<))
-          "hashmap-iterate should visit all values."))
+          "maphash should visit all values."))
 
     ;; Can we succesfully clear the map?
-    (finishes (hashmap-clear map))
+    (finishes (clrhash map))
 
     (let ((counter 0))
-      (hashmap-iterate map (lambda (key value) (incf counter)))
+      (maphash map (lambda (key value) (incf counter)))
       (is (equal 0 counter)))
 
 

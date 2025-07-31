@@ -1,12 +1,14 @@
 (defpackage #:hashtable-test
   (:use #:cl)
-  (:export #:hashmap-create
-           #:hashmap-add
-           #:hashmap-get
-           #:hashmap-delete
-           #:hashmap-clear
-           #:hashmap-iterate
-           #:cl-hashmap))
-
-;;TODO: shadow all functions I need to shadow
-;; (:shadow #:gethash)
+  (:shadow #:make-hash-table
+           #:gethash
+           #:remhash
+           #:clrhash
+           #:maphash)
+  (:export #:cl-hashmap
+           #:make-hash-table
+           #:addhash
+           #:gethash
+           #:remhash
+           #:clrhash
+           #:maphash))
