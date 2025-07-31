@@ -1,12 +1,9 @@
-(defpackage #:hasthtable-test
-  (:use #:cl)
-  (:export #:add-entry
-           #:get-entry))
+(in-package #:hashtable-test)
 
 (let ((my-hash (make-hash-table)))
 
   (defun add-entry (key val)
-    * (setf (gethash key my-hash) val))
+    (setf (gethash key my-hash) val))
 
   (defun get-entry (key)
     (gethash key my-hash))
